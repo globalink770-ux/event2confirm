@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event2Confirm — כניסה</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Heebo:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Heebo',sans-serif;background:#1a1a2e;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.stars{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.star{position:absolute;background:white;border-radius:50%;animation:tw var(--d,3s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes tw{0%,100%{opacity:.05}50%{opacity:.6}}
+.box{background:rgba(255,255,255,.04);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:2.5rem;width:360px;position:relative;z-index:1;text-align:center}
+.logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:white;margin-bottom:.25rem}
+.logo span{color:#00b4d8}
+.subtitle{font-size:12px;color:rgba(255,255,255,.4);letter-spacing:2px;margin-bottom:2rem}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),transparent);margin-bottom:2rem}
+.fg{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;text-align:right}
+.fg label{font-size:11px;color:rgba(255,255,255,.5);font-weight:500;letter-spacing:.5px}
+.fg input{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;font-size:14px;font-family:'Heebo',sans-serif;color:white;transition:border-color .2s}
+.fg input:focus{outline:none;border-color:#00b4d8}
+.fg input::placeholder{color:rgba(255,255,255,.25)}
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#00b4d8,#48cae4);border:none;border-radius:12px;color:white;font-size:15px;font-family:'Heebo',sans-serif;font-weight:500;cursor:pointer;margin-top:8px;transition:opacity .2s}
+.btn-login:hover{opacity:.88}
+.error{display:none;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);border-radius:10px;padding:10px;font-size:13px;color:#f87171;margin-top:12px}
+.branding{font-size:10px;color:rgba(255,255,255,.15);margin-top:1.5rem;letter-spacing:2px}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="box">
+  <div class="logo">Event2<span>Confirm</span></div>
+  <div class="subtitle">מערכת ניהול</div>
+  <div class="divider"></div>
+  <div class="fg">
+    <label>שם משתמש</label>
+    <input type="text" id="username" placeholder="admin">
+  </div>
+  <div class="fg">
+    <label>סיסמא</label>
+    <input type="password" id="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+  </div>
+  <button class="btn-login" onclick="login()">כניסה למערכת</button>
+  <div class="error" id="error">שם משתמש או סיסמא שגויים</div>
+  <div class="branding">EVENT2CONFIRM</div>
+</div>
+<script>
+function makeStars(){const el=document.getElementById('stars');for(let i=0;i<60;i++){const s=document.createElement('div');s.className='star';const sz=Math.random()*2+.5;s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${2+Math.random()*4}s;--dl:${Math.random()*3}s`;el.appendChild(s);}}
+makeStars();
+
+// שנה את הסיסמא כאן!
+const USERS = {
+  'admin': 'event2024',
+  'mike': 'mike123'
+};
+
+function login(){
+  const u=document.getElementById('username').value.trim();
+  const p=document.getElementById('password').value;
+  const err=document.getElementById('error');
+  if(USERS[u] && USERS[u]===p){
+    sessionStorage.setItem('e2c_auth','true');
+    window.location.href='admin/index.html';
+  } else {
+    err.style.display='block';
+    setTimeout(()=>err.style.display='none',3000);
+  }
+}
+</script>
+</body>
+</html>
